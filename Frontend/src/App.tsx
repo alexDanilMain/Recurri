@@ -15,6 +15,20 @@ function App() {
 
   const apiCalendar = new ApiCalendar(config);
 
+  const eventFromNow: object = {
+    summary: "Poc Dev From Now",
+    time: 480,
+  };
+
+  apiCalendar
+    .createEventFromNow(eventFromNow)
+    .then((result: object) => {
+      console.log(result);
+    })
+    .catch((error: any) => {
+      console.log(error);
+    })
+
   return (
     <GoogleLogin
     onSuccess={credentialResponse => {
