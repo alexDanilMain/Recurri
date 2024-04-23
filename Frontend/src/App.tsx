@@ -1,22 +1,6 @@
 import { TokenResponse, googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { addHours } from "date-fns";
-import { getAnalytics } from "firebase/analytics";
-import { initializeApp } from "firebase/app";
-import { useEffect, useState } from "react";
-
-
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCofiE5jlHTtCJxtaLFRqoym3lAdpR6qKs",
-//   authDomain: "kindcoderscalendar.firebaseapp.com",
-//   projectId: "kindcoderscalendar",
-//   storageBucket: "kindcoderscalendar.appspot.com",
-//   messagingSenderId: "1021052820543",
-//   appId: "1:1021052820543:web:0dd20c7f4a7eb03973ec8a",
-//   measurementId: "G-RS02C2TDX2"
-// };
-
-// const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+import { useState } from "react";
 
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -25,9 +9,7 @@ export function getCookie(name: string) {
 }
 
 function App() {
-  const [user, setUser] = useState<Omit<TokenResponse, "error" | "error_description" | "error_uri">>();
   const [profile, setProfile] = useState<any>([]);
-
 
   const now = new Date();
   const newTime = addHours(now, 2)
@@ -64,25 +46,6 @@ function App() {
   const login = () => {
     location.href = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com';
   }
-
-  useEffect(
-    () => {
-      if (user) {
-        fetch
-          (`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`, {
-            headers: {
-              Authorization: `Bearer ${user.access_token}`,
-              Accept: 'application/json'
-            }
-          })
-          .then((res) => {
-            setProfile(res.data);
-          })
-          .catch((err) => console.log(err));
-      }
-    },
-    [user]
-  );
 
   // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
