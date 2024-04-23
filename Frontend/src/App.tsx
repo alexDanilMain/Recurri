@@ -1,5 +1,4 @@
-import { TokenResponse, googleLogout, useGoogleLogin } from "@react-oauth/google";
-import { addHours } from "date-fns";
+import { GoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
 
 export function getCookie(name: string) {
@@ -9,71 +8,25 @@ export function getCookie(name: string) {
 }
 
 function App() {
-  const [profile, setProfile] = useState<any>([]);
 
-  const now = new Date();
-  const newTime = addHours(now, 2)
-  async function createCalendarEvent() {
-    console.log("Creating calendar event");
-    const event = {
-      'summary': "Testing calendar api",
-      'description': "testing calendar api",
-      'start': {
-        'dateTime': now.toISOString(), // Date.toISOString() ->
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone // America/Los_Angeles
-      },
-      'end': {
-        'dateTime': newTime.toISOString(), // Date.toISOString() ->
-        'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone // America/Los_Angeles
-      }
-    }
-
-    await fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-      method: "POST",
-      headers: {
-        'Content-type': "application/json; charset=UTF-8",
-        'Authorization': `Bearer ${location.hash.slice(1).split("&")[1].split("=")[1]}` // Access token for google
-      },
-      body: JSON.stringify(event)
-    }).then((data) => {
-      return data.json();
-    }).then((data) => {
-      console.log(data);
-      alert("Event created, check your Google Calendar!");
-    });
-  }
-
-  const login = () => {
-    location.href = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com';
-  }
-
-  // log out function to log the user out of google and set the profile array to null
-  const logOut = () => {
-    googleLogout();
-    setProfile(null);
-  };
   return (
     <>
-      <div>
-        <h2>React Google Login</h2>
-        <br />
-        <br />
-        {profile ? (
-          <div>
-            <img src={profile.picture} alt="user image" />
-            <h3>User Logged in</h3>
-            <p>Name: {profile.name}</p>
-            <p>Email Address: {profile.email}</p>
-            <br />
-            <br />
-            <button onClick={logOut}>Log out</button>
-          </div>
-        ) : (
-          <button onClick={login}>Sign in with Google 🚀 </button>
-        )}
-      </div>
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer" type="checkbox"  className="drawer-toggle" />
+        <div className="drawer-content">
+          <h1>Hello World</h1>
+          <label htmlFor="my-drawer" className="btn btn-primary drawer-button lg:hidden" >Open drawer</label>
+        </div>
+        <div className="drawer-side">
+          <label htmlFor="my-drawer" aria-label="close sidebar" className="drawer-overlay"></label>
+          <ul className="menu p-4 w-80 min-h-full bg-base-200 text-base-content ">
+            {/* Sidebar content here */}
+            <li><a>Sidebar Item 1</a></li>
+            <li><a>Sidebar Item 2</a></li>
 
-      <button onClick={() => createCalendarEvent()}> Post </button>
+          </ul>
+        </div>
+      </div>
     </>
   )
 
