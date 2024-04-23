@@ -1,6 +1,8 @@
 import { TokenResponse, googleLogout, useGoogleLogin } from "@react-oauth/google";
 import { addHours } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -13,6 +15,7 @@ function App() {
 
   const now = new Date();
   const newTime = addHours(now, 2)
+
   async function createCalendarEvent() {
     console.log("Creating calendar event");
     const event = {
@@ -41,6 +44,26 @@ function App() {
       console.log(data);
       alert("Event created, check your Google Calendar!");
     });
+  }
+
+  const AuthRedirectPage = () => {
+    const location = useLocation();
+    const history = useHistory();
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.hash);
+    const accessToken = params.get('access_token');
+
+    if (accessToken){
+      setCookie('access_token', accessToken, 1);
+
+      history.push('/calendar');
+    }
+  }, [location, history]);
+
+  const setCookie = (name, value, days) => {
+    const 
   }
 
   const login = () => {
