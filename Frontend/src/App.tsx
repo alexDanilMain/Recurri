@@ -1,6 +1,8 @@
 import { googleLogout } from "@react-oauth/google";
 import { addHours } from "date-fns";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getUser, { User } from "./api/UserApi";
+import { useQuery } from "@tanstack/react-query";
 
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -20,7 +22,7 @@ export const deleteCookie = (name: string) => {
 // Access token from url ${location.hash.slice(1).split("&")[1].split("=")[1]} 
 
 function App() {
-  const [profile, setProfile] = useState<any>([]);
+  const [profile, setProfile] = useState<User>();
 
   const now = new Date();
   const newTime = addHours(now, 2)
@@ -31,10 +33,13 @@ function App() {
 
     setCookie('access_token', accessToken!, 1);
     location.href = 'http://localhost:5173'
-
   };
 
 
+    const { data, isLoading, isError } = useQuery({
+      queryKey: ["user"],
+      queryFn: getUser
+    })
 
 
   async function createCalendarEvent() {
@@ -67,6 +72,17 @@ function App() {
     });
   }
 
+  const createProfile = () => {
+    const user: User = {
+      picture: data.photos[0].url,
+      name: data.names[0].displayName,
+      email: data.emailAddresses[0].value
+    }
+    console.log(user);
+  
+  setProfile(user);
+  }
+
   const login = () => {
     location.href = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com';
   }
@@ -74,9 +90,18 @@ function App() {
   // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
     googleLogout();
-    setProfile(null);
+    setProfile(undefined);
     deleteCookie("access_token");
   };
+
+  if(isLoading){
+    return <p>Loading ...</p>
+  }
+
+  if(data && !profile){
+    createProfile();
+  }
+  
   return (
     <>
       <div>
