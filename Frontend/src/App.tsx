@@ -1,8 +1,6 @@
 import { googleLogout } from "@react-oauth/google";
 import { addHours } from "date-fns";
-import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
 
 export function getCookie(name: string) {
   const value = `; ${document.cookie}`;
@@ -15,6 +13,10 @@ export const setCookie = (name: string, value: string, days: number) => {
   document.cookie = `${name}=${value}; expires=${expires}; path=/`;
 }
 
+export const deleteCookie = (name: string) => {
+  document.cookie = name + '=; Max-Age=-9999999999;';
+}
+
 // Access token from url ${location.hash.slice(1).split("&")[1].split("=")[1]} 
 
 function App() {
@@ -24,13 +26,14 @@ function App() {
   const newTime = addHours(now, 2)
 
   if (location.hash) {
-    console.log("Changing url and setting cookie");
     const params = new URLSearchParams(location.hash);
     const accessToken = params.get('access_token');
 
     setCookie('access_token', accessToken!, 1);
     location.href = 'http://localhost:5173'
-  }
+
+  };
+
 
 
 
@@ -72,6 +75,7 @@ function App() {
   const logOut = () => {
     googleLogout();
     setProfile(null);
+    deleteCookie("access_token");
   };
   return (
     <>
