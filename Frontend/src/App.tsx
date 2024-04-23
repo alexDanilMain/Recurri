@@ -1,7 +1,7 @@
-import { TokenResponse, googleLogout, useGoogleLogin } from "@react-oauth/google";
+import { googleLogout } from "@react-oauth/google";
 import { addHours } from "date-fns";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
 export function getCookie(name: string) {
@@ -10,11 +10,29 @@ export function getCookie(name: string) {
   if (parts.length === 2) return parts.pop()?.split(';').shift();
 }
 
+export const setCookie = (name: string, value: string, days: number) => {
+  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+// Access token from url ${location.hash.slice(1).split("&")[1].split("=")[1]} 
+
 function App() {
   const [profile, setProfile] = useState<any>([]);
 
   const now = new Date();
   const newTime = addHours(now, 2)
+
+  if (location.hash) {
+    console.log("Changing url and setting cookie");
+    const params = new URLSearchParams(location.hash);
+    const accessToken = params.get('access_token');
+
+    setCookie('access_token', accessToken!, 1);
+    location.href = 'http://localhost:5173'
+  }
+
+
 
   async function createCalendarEvent() {
     console.log("Creating calendar event");
@@ -35,7 +53,7 @@ function App() {
       method: "POST",
       headers: {
         'Content-type': "application/json; charset=UTF-8",
-        'Authorization': `Bearer ${location.hash.slice(1).split("&")[1].split("=")[1]}` // Access token for google
+        'Authorization': `Bearer ${getCookie("access_token")}` // Access token for google
       },
       body: JSON.stringify(event)
     }).then((data) => {
@@ -44,26 +62,6 @@ function App() {
       console.log(data);
       alert("Event created, check your Google Calendar!");
     });
-  }
-
-  const AuthRedirectPage = () => {
-    const location = useLocation();
-    const history = useHistory();
-  }
-
-  useEffect(() => {
-    const params = new URLSearchParams(location.hash);
-    const accessToken = params.get('access_token');
-
-    if (accessToken){
-      setCookie('access_token', accessToken, 1);
-
-      history.push('/calendar');
-    }
-  }, [location, history]);
-
-  const setCookie = (name, value, days) => {
-    const 
   }
 
   const login = () => {
