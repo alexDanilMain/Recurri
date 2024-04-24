@@ -1,7 +1,7 @@
 import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
-import { createCalendarEvent, createCalendarTemplate, createSprint, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
+import { changeDate, createCalendarEvent, createCalendarTemplate, createSprint, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 
 
@@ -80,6 +80,7 @@ function App() {
       <button onClick={() => deleteTemplate("salt")}>Delete salt event</button>
       <button onClick={() => deleteTemplate("sprint")}>Delete sprint!</button>
       <button onClick={() => getSingleEvent()}>Get single event</button>
+      <button onClick={() => changeDate()}>Change standup 11/9 to 18/9</button>
     </>
   )
 
