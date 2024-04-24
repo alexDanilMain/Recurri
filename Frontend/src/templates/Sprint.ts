@@ -13,6 +13,11 @@ export const sprint = [
     recurrence: [
       "RRULE:FREQ=WEEKLY;COUNT=2;BYDAY=TU", // Occurs first Tuesday of the Sprint
     ],
+    extendedProperties: {
+      shared: {
+        template: "sprint",
+      },
+    },
   },
   {
     summary: "Daily Stand-up",
@@ -28,6 +33,11 @@ export const sprint = [
     recurrence: [
       "RRULE:FREQ=DAILY;COUNT=10;BYDAY=MO,TU,WE,TH,FR", // Weekdays for two weeks excluding weekends
     ],
+    extendedProperties: {
+      shared: {
+        template: "sprint",
+      },
+    },
   },
   {
     summary: "Sprint Review",
@@ -43,6 +53,11 @@ export const sprint = [
     recurrence: [
       "RRULE:FREQ=WEEKLY;COUNT=2;BYDAY=FR", // Last Friday of the Sprint
     ],
+    extendedProperties: {
+      shared: {
+        template: "sprint",
+      },
+    },
   },
   {
     summary: "Sprint Retrospective",
@@ -58,5 +73,10 @@ export const sprint = [
     recurrence: [
       "RRULE:FREQ=WEEKLY;COUNT=2;BYDAY=FR", // Last Friday of the Sprint, following the Review
     ],
+    extendedProperties: {
+      shared: {
+        template: "sprint",
+      },
+    },
   },
 ];
