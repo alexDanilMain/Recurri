@@ -14,6 +14,7 @@ interface EventDataArr {
   items: EventData[];
 }
 
+
 const now = new Date();
 const newTime = addHours(now, 2);
 const BASE_URL =
@@ -147,9 +148,7 @@ export async function deleteCalendarEvent(eventId: string) {
   alert("Event deleted, check your Google Calendar!");
 }
 
-export const getReocurringEvents = async (
-  template: string
-): Promise<string | null> => {
+export const getReocurringEvents = async (template: string): Promise<string[] | null> => {
   try {
     const response = await fetch(
       BASE_URL +
@@ -168,8 +167,8 @@ export const getReocurringEvents = async (
     }
 
     const eventDataArr: EventDataArr = await response.json();
-    console.log("eventDataArr", eventDataArr.items[0].id);
-    return eventDataArr.items[0].id;
+    console.log("eventDataArr", eventDataArr.items.map(event => event.id));
+    return eventDataArr.items.map(event => event.id);
   } catch (error) {
     console.error("There was a problem with the fetch operation:", error);
     return null;
