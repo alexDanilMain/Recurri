@@ -1,5 +1,5 @@
 import { addHours } from "date-fns";
-import { getCookie } from "../App";
+import { getCookie } from "../helpers/CookieHelpers";
 
 const now = new Date();
 const newTime = addHours(now, 2);

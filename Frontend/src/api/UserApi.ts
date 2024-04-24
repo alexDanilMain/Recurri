@@ -1,4 +1,4 @@
-import { getCookie } from "../App";
+import { getCookie } from "../helpers/CookieHelpers";
 
 export type User = {
   picture: string;
@@ -10,9 +10,8 @@ const BASE_URL = 'https://people.googleapis.com/v1/people/me?personFields=emailA
 
 export default async function getUser() {
   try {
-    console.log(getCookie("access_token"));
     const response = await fetch(
-      `${BASE_URL}${import.meta.env.VITE_APP_API_KEY}`,
+      BASE_URL + import.meta.env.VITE_APP_API_KEY,
       {
         headers: {
           Authorization: `Bearer ${getCookie("access_token")}`,
