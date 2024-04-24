@@ -190,3 +190,38 @@ export async function deleteTemplate(template: string) {
   }
   else{console.log("Could not find any events with template ", template)}
 }
+
+export async function changeDate(): Promise<EventData | null> {
+  try {
+    const response = await fetch(`${BASE_URL}/a6cu2anm7gtot64s3ac74dbclc_20240912T080000Z?key=${import.meta.env.VITE_APP_API_KEY}`, { 
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${getCookie("access_token")}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "start": {
+          "dateTime": "2024-09-18T10:00:00+02:00",
+          "timeZone": "Europe/Stockholm"
+        },
+        "end": {
+          "dateTime": "2024-09-18T10:15:00+02:00",
+          "timeZone": "Europe/Stockholm"
+        }
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+  
+    const eventData: EventData = await response.json();
+    console.log("eventData", eventData);
+    return eventData;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    return null;
+  }
+}
+

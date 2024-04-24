@@ -78,7 +78,7 @@ function App() {
       <button onClick={() => createSprint()}>Create sprint!</button>
       <button onClick={() => deleteCalendarEvent("5a0de5di5gn7ugc7qbtm7jbamo")}>Delete latest event</button>
       <button onClick={() => deleteTemplate("salt")}>Delete salt event</button>
-      <button onClick={() => deleteTemplate("sprint")}>Delete sprint</button>
+      <button onClick={() => deleteTemplate("sprint")}>Delete sprint!</button>
       <button onClick={() => getSingleEvent()}>Get single event</button>
     </>
   )
