@@ -14,7 +14,6 @@ interface EventDataArr {
   items: EventData[];
 }
 
-
 const now = new Date();
 const newTime = addHours(now, 2);
 const BASE_URL =
@@ -48,20 +47,23 @@ export async function createCalendarEvent() {
 }
 
 export async function createSprint() {
-  const promises = sprint.map(event => {
-    return fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
-      method: "POST",
-      headers: {
-        'Content-type': "application/json; charset=UTF-8",
-        'Authorization': `Bearer ${getCookie("access_token")}` // Access token for Google
-      },
-      body: JSON.stringify(event)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      return data;
-    });
+  const promises = sprint.map((event) => {
+    return fetch(
+      "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+          Authorization: `Bearer ${getCookie("access_token")}`, // Access token for Google
+        },
+        body: JSON.stringify(event),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        return data;
+      });
   });
 
   try {
@@ -73,7 +75,6 @@ export async function createSprint() {
     alert("Failed to create events");
   }
 }
-
 
 export async function createCalendarTemplate() {
   const event = {
@@ -148,7 +149,9 @@ export async function deleteCalendarEvent(eventId: string) {
   alert("Event deleted, check your Google Calendar!");
 }
 
-export const getReocurringEvents = async (template: string): Promise<string[] | null> => {
+export const getReocurringEvents = async (
+  template: string
+): Promise<string[] | null> => {
   try {
     const response = await fetch(
       BASE_URL +
@@ -167,8 +170,11 @@ export const getReocurringEvents = async (template: string): Promise<string[] | 
     }
 
     const eventDataArr: EventDataArr = await response.json();
-    console.log("eventDataArr", eventDataArr.items.map(event => event.id));
-    return eventDataArr.items.map(event => event.id);
+    console.log(
+      "eventDataArr",
+      eventDataArr.items.map((event) => event.id)
+    );
+    return eventDataArr.items.map((event) => event.id);
   } catch (error) {
     console.error("There was a problem with the fetch operation:", error);
     return null;
@@ -177,7 +183,10 @@ export const getReocurringEvents = async (template: string): Promise<string[] | 
 
 export async function deleteTemplate(template: string) {
   const result = await getReocurringEvents(template);
-  console.log("Deleting events with id: ", result);
-  await deleteCalendarEvent(result!);
-  alert("Event deleted, check your Google Calendar!");
+  if (result) {
+    console.log("Deleting events with id: ", result);
+    result.map((event) => deleteCalendarEvent(event));
+    alert("Event deleted, check your Google Calendar!");
+  }
+  else{console.log("Could not find any events with template ", template)}
 }
