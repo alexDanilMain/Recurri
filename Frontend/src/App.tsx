@@ -1,7 +1,7 @@
 import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
-import { createCalendarEvent } from "./api/CalendarApi";
+import { createCalendarEvent, deleteCalendarEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 
 
@@ -73,6 +73,7 @@ function App() {
       </div>
 
       <button onClick={() => createCalendarEvent()}> Post </button>
+      <button onClick={() => deleteCalendarEvent("5a0de5di5gn7ugc7qbtm7jbamo")}>Delete latest event</button>
     </>
   )
 
