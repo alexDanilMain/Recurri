@@ -1,7 +1,7 @@
 import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
-import { createCalendarEvent, createCalendarTemplate, deleteCalendarEvent } from "./api/CalendarApi";
+import { createCalendarEvent, createCalendarTemplate, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 
 
@@ -25,6 +25,7 @@ function App() {
     queryKey: ["user"],
     queryFn: getUser
   })
+
 
   const createProfile = () => {
     const user: User = {
@@ -72,9 +73,11 @@ function App() {
         )}
       </div>
 
-      <button onClick={() => createCalendarEvent()}> Post </button>
+      <button onClick={() => createCalendarEvent()}> Create single event </button>
       <button onClick={() => createCalendarTemplate()}>Create salt template</button>
       <button onClick={() => deleteCalendarEvent("5a0de5di5gn7ugc7qbtm7jbamo")}>Delete latest event</button>
+      <button onClick={() => deleteTemplate("salt")}>Delete salt event</button>
+      <button onClick={() => getSingleEvent()}>Get single event</button>
     </>
   )
 

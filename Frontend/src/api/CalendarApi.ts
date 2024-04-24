@@ -1,6 +1,18 @@
 import { addHours } from "date-fns";
 import { getCookie } from "../helpers/CookieHelpers";
 
+interface EventData {
+  summary: string;
+  start: { dateTime: string };
+  end: { dateTime: string };
+  location: string;
+  id: string;
+}
+
+interface EventDataArr {
+  items: EventData[];
+}
+
 const now = new Date();
 const newTime = addHours(now, 2);
 const BASE_URL =
@@ -47,10 +59,10 @@ export async function createCalendarTemplate() {
     },
     recurrence: ["RRULE:FREQ=WEEKLY;COUNT=11;BYDAY=MO"],
     extendedProperties: {
-        shared: {
-          template: "salt"
-        }
-      }
+      shared: {
+        template: "salt",
+      },
+    },
   };
 
   await fetch(BASE_URL, {
@@ -66,6 +78,32 @@ export async function createCalendarTemplate() {
   });
 }
 
+export const getSingleEvent = async (): Promise<EventData | null> => {
+  try {
+    const response = await fetch(
+      BASE_URL +
+        "/vjp0ov2kgqgealhn2aptl9h89o?key=" +
+        import.meta.env.VITE_APP_API_KEY,
+      {
+        headers: {
+          Authorization: `Bearer ${getCookie("access_token")}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const eventData: EventData = await response.json();
+    console.log("eventData", eventData);
+    return eventData;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    return null;
+  }
+};
+
 export async function deleteCalendarEvent(eventId: string) {
   await fetch(
     BASE_URL + `/${eventId}?key=${import.meta.env.VITE_APP_API_KEY}`,
@@ -76,10 +114,42 @@ export async function deleteCalendarEvent(eventId: string) {
         Authorization: `Bearer ${getCookie("access_token")}`,
       },
     }
-  ).then((data) => {
-    alert("Event deleted, check your Google Calendar!");
-    return data.json();
-  });
+  );
+  alert("Event deleted, check your Google Calendar!");
 }
 
-export async function deleteTemplate(template: string) {}
+export const getReocurringEvents = async (
+  template: string
+): Promise<string | null> => {
+  try {
+    const response = await fetch(
+      BASE_URL +
+        `?sharedExtendedProperty=template%3D${template}&key=${
+          import.meta.env.VITE_APP_API_KEY
+        }`,
+      {
+        headers: {
+          Authorization: `Bearer ${getCookie("access_token")}`,
+          Accept: "application/json",
+        },
+      }
+    );
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const eventDataArr: EventDataArr = await response.json();
+    console.log("eventDataArr", eventDataArr.items[0].id);
+    return eventDataArr.items[0].id;
+  } catch (error) {
+    console.error("There was a problem with the fetch operation:", error);
+    return null;
+  }
+};
+
+export async function deleteTemplate(template: string) {
+  const result = await getReocurringEvents(template);
+  console.log("Deleting events with id: ", result);
+  await deleteCalendarEvent(result!);
+  alert("Event deleted, check your Google Calendar!");
+}
