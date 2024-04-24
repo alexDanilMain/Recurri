@@ -1,5 +1,6 @@
 import { addHours } from "date-fns";
 import { getCookie } from "../helpers/CookieHelpers";
+import { sprint } from "../templates/Sprint";
 
 interface EventData {
   summary: string;
@@ -44,6 +45,34 @@ export async function createCalendarEvent() {
     return data.json();
   });
 }
+
+export async function createSprint() {
+  const promises = sprint.map(event => {
+    return fetch("https://www.googleapis.com/calendar/v3/calendars/primary/events", {
+      method: "POST",
+      headers: {
+        'Content-type': "application/json; charset=UTF-8",
+        'Authorization': `Bearer ${getCookie("access_token")}` // Access token for Google
+      },
+      body: JSON.stringify(event)
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      return data;
+    });
+  });
+
+  try {
+    const results = await Promise.all(promises);
+    alert("All events created, check your Google Calendar!");
+    console.log(results);
+  } catch (error) {
+    console.error("Error creating events", error);
+    alert("Failed to create events");
+  }
+}
+
 
 export async function createCalendarTemplate() {
   const event = {
