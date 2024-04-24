@@ -2,10 +2,9 @@ import { addHours } from "date-fns";
 import { getCookie } from "../App";
 
 const now = new Date();
-const newTime = addHours(now, 2)
+const newTime = addHours(now, 2);
 
 export async function createCalendarEvent() {
-  console.log("Creating calendar event");
   const event = {
     summary: "Testing calendar api",
     description: "testing calendar api",
@@ -25,16 +24,12 @@ export async function createCalendarEvent() {
       method: "POST",
       headers: {
         "Content-type": "application/json; charset=UTF-8",
-        Authorization: `Bearer ${getCookie("access_token")}`, // Access token for google
+        Authorization: `Bearer ${getCookie("access_token")}`,
       },
       body: JSON.stringify(event),
     }
-  )
-    .then((data) => {
-      return data.json();
-    })
-    .then((data) => {
-      console.log(data);
-      alert("Event created, check your Google Calendar!");
-    });
+  ).then((data) => {
+    alert("Event created, check your Google Calendar!");
+    return data.json();
+  });
 }
