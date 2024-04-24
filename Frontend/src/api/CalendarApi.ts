@@ -3,6 +3,7 @@ import { getCookie } from "../helpers/CookieHelpers";
 
 const now = new Date();
 const newTime = addHours(now, 2);
+const BASE_URL = 'https://www.googleapis.com/calendar/v3/calendars/primary/events';
 
 export async function createCalendarEvent() {
   const event = {
@@ -19,7 +20,7 @@ export async function createCalendarEvent() {
   };
 
   await fetch(
-    "https://www.googleapis.com/calendar/v3/calendars/primary/events",
+    BASE_URL,
     {
       method: "POST",
       headers: {
@@ -34,10 +35,10 @@ export async function createCalendarEvent() {
   });
 }
 
-export async function deleteCalendarEvent() {
+export async function deleteCalendarEvent(eventId: string) {
 
     await fetch(
-        "https://www.googleapis.com/calendar/v3/calendars/[CALENDARID]/events/[EVENTID]?key=[YOUR_API_KEY]",
+        BASE_URL + `/${eventId}?key=${import.meta.env.VITE_APP_API_KEY}`,
         {
           method: "DELETE",
           headers: {
