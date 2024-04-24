@@ -33,3 +33,23 @@ export async function createCalendarEvent() {
     return data.json();
   });
 }
+
+export async function deleteCalendarEvent() {
+
+    await fetch(
+        "https://www.googleapis.com/calendar/v3/calendars/[CALENDARID]/events/[EVENTID]?key=[YOUR_API_KEY]",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${getCookie("access_token")}`,
+          },
+        }
+      ).then((data) => {
+        alert("Event deleted, check your Google Calendar!");
+        return data.json();
+      });
+
+}
+
+
