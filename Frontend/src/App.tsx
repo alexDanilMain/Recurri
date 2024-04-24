@@ -2,21 +2,11 @@ import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
 import { createCalendarEvent } from "./api/CalendarApi";
+import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 
-export function getCookie(name: string) {
-  const value = `; ${document.cookie}`;
-  const parts: string[] = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop()?.split(';').shift();
-}
 
-export const setCookie = (name: string, value: string, days: number) => {
-  const expires = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toUTCString();
-  document.cookie = `${name}=${value}; expires=${expires}; path=/`;
-}
 
-export const deleteCookie = (name: string) => {
-  document.cookie = name + '=; Max-Age=-9999999999;';
-}
+const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=`;
 
 
 function App() {
@@ -31,11 +21,10 @@ function App() {
   };
 
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading} = useQuery({
     queryKey: ["user"],
     queryFn: getUser
   })
-
 
   const createProfile = () => {
     const user: User = {
@@ -43,25 +32,19 @@ function App() {
       name: data.names[0].displayName,
       email: data.emailAddresses[0].value
     }
-    console.log(user);
-
     setProfile(user);
   }
 
   const login = () => {
-    location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=${import.meta.env.VITE_APP_CLIENT_ID}`;
+    location.href = LOGIN_URL + import.meta.env.VITE_APP_CLIENT_ID;
   }
 
-  // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
     setProfile(undefined);
     deleteCookie("access_token");
     window.location.reload();
   };
 
-  if (isLoading) {
-    return <p>Loading ...</p>
-  }
 
   if (data && !profile) {
     createProfile();
@@ -70,6 +53,7 @@ function App() {
   return (
     <>
       <div>
+        {isLoading && <p>Loading ...</p>}
         <h2>React Google Login</h2>
         <br />
         <br />
