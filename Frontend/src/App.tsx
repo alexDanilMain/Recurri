@@ -1,6 +1,5 @@
-import { googleLogout } from "@react-oauth/google";
 import { addHours } from "date-fns";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
 
@@ -24,6 +23,8 @@ export const deleteCookie = (name: string) => {
 function App() {
   const [profile, setProfile] = useState<User>();
 
+  console.log("Api key: ", import.meta.env.VITE_APP_API_KEY);
+
   const now = new Date();
   const newTime = addHours(now, 2)
 
@@ -36,10 +37,10 @@ function App() {
   };
 
 
-    const { data, isLoading, isError } = useQuery({
-      queryKey: ["user"],
-      queryFn: getUser
-    })
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser
+  })
 
 
   async function createCalendarEvent() {
@@ -79,29 +80,29 @@ function App() {
       email: data.emailAddresses[0].value
     }
     console.log(user);
-  
-  setProfile(user);
+
+    setProfile(user);
   }
 
   const login = () => {
-    location.href = 'https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com';
+    location.href = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=${import.meta.env.VITE_APP_CLIENT_ID}`;
   }
 
   // log out function to log the user out of google and set the profile array to null
   const logOut = () => {
-    googleLogout();
     setProfile(undefined);
     deleteCookie("access_token");
+    window.location.reload();
   };
 
-  if(isLoading){
+  if (isLoading) {
     return <p>Loading ...</p>
   }
 
-  if(data && !profile){
+  if (data && !profile) {
     createProfile();
   }
-  
+
   return (
     <>
       <div>
