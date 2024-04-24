@@ -6,11 +6,13 @@ export type User = {
   email: string;
 };
 
+const BASE_URL = 'https://people.googleapis.com/v1/people/me?personFields=emailAddresses,names,photos&sources=READ_SOURCE_TYPE_PROFILE&key=';
+
 export default async function getUser() {
   try {
     console.log(getCookie("access_token"));
     const response = await fetch(
-      `https://people.googleapis.com/v1/people/me?personFields=emailAddresses,names,photos&sources=READ_SOURCE_TYPE_PROFILE&key=${import.meta.env.VITE_APP_API_KEY}`,
+      `${BASE_URL}${import.meta.env.VITE_APP_API_KEY}`,
       {
         headers: {
           Authorization: `Bearer ${getCookie("access_token")}`,
