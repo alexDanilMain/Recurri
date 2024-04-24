@@ -1,0 +1,15 @@
+{
+    "summary": "Testing calendar api",
+    "description": "testing calendar api",
+    "start": {
+      "dateTime": "2024-04-23T10:00:00-07:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "end": {
+      "dateTime": "2024-04-23T11:00:00-07:00",
+      "timeZone": "America/Los_Angeles"
+    },
+    "recurrence": [
+      "RRULE:FREQ=WEEKLY;UNTIL=20240514T170000Z;BYDAY=MO,TU,WE,TH,FR"
+    ]
+  }
