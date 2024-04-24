@@ -18,12 +18,9 @@ export const deleteCookie = (name: string) => {
   document.cookie = name + '=; Max-Age=-9999999999;';
 }
 
-// Access token from url ${location.hash.slice(1).split("&")[1].split("=")[1]} 
 
 function App() {
   const [profile, setProfile] = useState<User>();
-
-  console.log("Api key: ", import.meta.env.VITE_APP_API_KEY);
 
   const now = new Date();
   const newTime = addHours(now, 2)
@@ -33,7 +30,7 @@ function App() {
     const accessToken = params.get('access_token');
 
     setCookie('access_token', accessToken!, 1);
-    location.href = 'http://localhost:5173'
+    location.href = import.meta.env.BASE_URL;
   };
 
 
