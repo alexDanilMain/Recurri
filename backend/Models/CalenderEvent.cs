@@ -2,15 +2,13 @@ public class CalendarEvent
 {
     public string Summary { get; set; }
     public string Location { get; set; }
-    public int StartDateTime { get; set; }
-    public int EndDateTime { get; set; }
-    public string TimeZone { get; set; }
-    public Recurrence Recurrence { get; set; }
+    public EventDateTime Start { get; set; }
+    public EventDateTime End { get; set; }
+    public List<string> Recurrence { get; set; }
 }
 
-public class Recurrence
+public class EventDateTime
 {
-    public string Frequency { get; set; } 
-    public int Count { get; set; }
-    public string ByDay { get; set; } 
+    public string DateTime { get; set; }
+    public string TimeZone { get; set; }
 }
