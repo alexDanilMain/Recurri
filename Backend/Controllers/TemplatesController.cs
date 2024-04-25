@@ -1,5 +1,7 @@
 using Backend.Data;
+using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Controllers
 {
@@ -8,27 +10,25 @@ namespace Backend.Controllers
     public class TemplatesController : ControllerBase
     {
 
-
         private readonly TemplateContext _context;
 
-        public CalendarTemplatesController(AppDbContext context)
+        public TemplatesController(TemplateContext context)
         {
             _context = context;
         }
 
-        // GET: api/CalendarTemplates
+
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
         {
-            // Only Include is needed, no ThenInclude for direct properties like Start and End
-            return await _context.Templates.Include(t => t.Events).ToListAsync();
+            return await _context.Templates.Include(t => t.Weeks).ToListAsync();
         }
 
-        // GET: api/CalendarTemplates/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Template>> GetTemplate(Guid id)
+        public async Task<ActionResult<Template>> GetTemplate(int id)
         {
-            var template = await _context.Templates.Include(t => t.Events).FirstOrDefaultAsync(t => t.Id == id);
+            var template = await _context.Templates.Include(t => t.Weeks).FirstOrDefaultAsync(t => t.Id == id);
 
             if (template == null)
             {
@@ -38,7 +38,6 @@ namespace Backend.Controllers
             return template;
         }
 
-        // POST: api/CalendarTemplates
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(Template template)
         {
@@ -48,9 +47,8 @@ namespace Backend.Controllers
             return CreatedAtAction("GetTemplate", new { id = template.Id }, template);
         }
 
-        // PUT: api/CalendarTemplates/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTemplate(Guid id, Template template)
+        public async Task<IActionResult> PutTemplate(int id, Template template)
         {
             if (id != template.Id)
             {
@@ -78,9 +76,8 @@ namespace Backend.Controllers
             return NoContent();
         }
 
-        // DELETE: api/CalendarTemplates/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTemplate(Guid id)
+        public async Task<IActionResult> DeleteTemplate(int id)
         {
             var template = await _context.Templates.FindAsync(id);
             if (template == null)
@@ -94,7 +91,7 @@ namespace Backend.Controllers
             return NoContent();
         }
 
-        private bool TemplateExists(Guid id)
+        private bool TemplateExists(int id)
         {
             return _context.Templates.Any(e => e.Id == id);
         }
