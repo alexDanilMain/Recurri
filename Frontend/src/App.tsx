@@ -76,14 +76,6 @@ function App() {
       </div>
 
       <Home/>
-
-      <button onClick={() => createCalendarEvent()}> Create single event </button>
-      <button onClick={() => createSprint()}>Create sprint!</button>
-      <button onClick={() => deleteCalendarEvent("5a0de5di5gn7ugc7qbtm7jbamo")}>Delete latest event</button>
-      <button onClick={() => deleteTemplate("salt")}>Delete salt event</button>
-      <button onClick={() => deleteTemplate("sprint")}>Delete sprint!</button>
-      <button onClick={() => getSingleEvent()}>Get single event</button>
-      <button onClick={() => changeDate()}>Change standup 11/9 to 18/9</button>
     </>
   )
 
