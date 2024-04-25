@@ -6,8 +6,8 @@ namespace Backend.Models
         public required string Name { get; set; }
         public string? Description { get; set; }
         public int Day { get; set; }
-        public int StartTime { get; set; }
-        public int EndTime { get; set; }
+        public string? StartTime { get; set; }
+        public string? EndTime { get; set; }
         public string? Recurrence { get; set; }
     }
 }
