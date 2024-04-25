@@ -1,3 +1,4 @@
+using Backend.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backend.Controllers
@@ -8,7 +9,7 @@ namespace Backend.Controllers
     {
 
 
-        private readonly AppDbContext _context;
+        private readonly TemplateContext _context;
 
         public CalendarTemplatesController(AppDbContext context)
         {
