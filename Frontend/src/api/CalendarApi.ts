@@ -1,6 +1,7 @@
 import { getCookie } from "../helpers/CookieHelpers";
 import { sprint } from "../templates/Sprint";
 import { saltEvent } from "../templates/SaltTemplate";
+import { singleEvent } from "../templates/SingleEvent";
 
 interface EventData {
   summary: string;
@@ -27,7 +28,7 @@ export async function createCalendarEvent() {
       "Content-type": "application/json; charset=UTF-8",
       Authorization: `Bearer ${getCookie("access_token")}`,
     },
-    body: JSON.stringify(event),
+    body: JSON.stringify(singleEvent),
   }).then((data) => {
     alert("Event created, check your Google Calendar!");
     return data.json();
