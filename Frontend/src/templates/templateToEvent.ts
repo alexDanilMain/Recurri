@@ -21,11 +21,11 @@ export default function templateToEvent(template: Template, startdate: number) {
     summary: weeks.events.description,
       location: weeks.events.location,
       start: {
-        dateTime: "2024-09-04T09:00:00+02:00",
+        dateTime: weeks.events.startTime,
         timeZone: "Europe/Stockholm",
       },
       end: {
-        dateTime: "2024-09-04T11:00:00+02:00",
+        dateTime: weeks.events.endTime,
         timeZone: "Europe/Stockholm",
       },
       recurrence: [

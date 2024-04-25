@@ -17,7 +17,7 @@ function App() {
     const accessToken = params.get('access_token');
 
     setCookie('access_token', accessToken!, 1);
-    location.href = import.meta.env.BASE_URL;
+    // location.href = import.meta.env.BASE_URL;
   };
 
 
