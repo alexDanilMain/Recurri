@@ -47,8 +47,8 @@ export async function createCalendarEvent() {
 }
 
 export async function createSprint() {
-  const promises = sprint.map((event) => {
-    return fetch(
+  const promises = sprint.map(async (event) => {
+    const response = await fetch(
       "https://www.googleapis.com/calendar/v3/calendars/primary/events",
       {
         method: "POST",
@@ -58,12 +58,10 @@ export async function createSprint() {
         },
         body: JSON.stringify(event),
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        return data;
-      });
+    );
+    const data = await response.json();
+    console.log(data);
+    return data;
   });
 
   try {
@@ -193,7 +191,7 @@ export async function deleteTemplate(template: string) {
 
 export async function changeDate(): Promise<EventData | null> {
   try {
-    const response = await fetch(`${BASE_URL}/a6cu2anm7gtot64s3ac74dbclc_20240912T080000Z?key=${import.meta.env.VITE_APP_API_KEY}`, { 
+    const response = await fetch(`${BASE_URL}/4d37mthif0j56un9on7se6pbio_20240911T080000Z?key=${import.meta.env.VITE_APP_API_KEY}`, { 
       method: "PATCH",
       headers: {
         Authorization: `Bearer ${getCookie("access_token")}`,
@@ -208,7 +206,8 @@ export async function changeDate(): Promise<EventData | null> {
         "end": {
           "dateTime": "2024-09-18T10:15:00+02:00",
           "timeZone": "Europe/Stockholm"
-        }
+        },
+        "status": "confirmed"
       })
     });
     
