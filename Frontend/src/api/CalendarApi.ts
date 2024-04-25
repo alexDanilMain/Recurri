@@ -1,6 +1,7 @@
 import { addHours } from "date-fns";
 import { getCookie } from "../helpers/CookieHelpers";
 import { sprint } from "../templates/Sprint";
+import { saltEvent } from "../templates/SaltTemplate";
 
 interface EventData {
   summary: string;
@@ -63,32 +64,13 @@ export async function createSprint() {
 }
 
 export async function createCalendarTemplate() {
-  const event = {
-    summary: "Coding Bootcamp Demo",
-    location: "Bootcamp Venue, Stockholm",
-    start: {
-      dateTime: "2024-06-02T15:00:00+02:00",
-      timeZone: "Europe/Stockholm",
-    },
-    end: {
-      dateTime: "2024-06-02T16:00:00+02:00",
-      timeZone: "Europe/Stockholm",
-    },
-    recurrence: ["RRULE:FREQ=WEEKLY;COUNT=11;BYDAY=MO"],
-    extendedProperties: {
-      shared: {
-        template: "salt",
-      },
-    },
-  };
-
   await fetch(BASE_URL, {
     method: "POST",
     headers: {
       "Content-type": "application/json; charset=UTF-8",
       Authorization: `Bearer ${getCookie("access_token")}`,
     },
-    body: JSON.stringify(event),
+    body: JSON.stringify(saltEvent),
   }).then((data) => {
     alert("Event created, check your Google Calendar!");
     return data.json();
