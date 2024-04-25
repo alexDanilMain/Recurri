@@ -3,6 +3,7 @@ import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
 import { changeDate, createCalendarEvent, createCalendarTemplate, createSprint, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
+import Login from "./components/login/Login";
 
 
 
@@ -69,7 +70,7 @@ function App() {
             <button onClick={logOut}>Log out</button>
           </div>
         ) : (
-          <button onClick={login}>Sign in with Google 🚀 </button>
+          <Login handleClick={login}/>
         )}
       </div>
 
