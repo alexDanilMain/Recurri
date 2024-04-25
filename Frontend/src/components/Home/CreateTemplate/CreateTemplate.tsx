@@ -58,7 +58,7 @@ function CreateTemplate() {
                 const [hoursString, minutesString] = event.startTime.split(":");
                 const hours = parseInt(hoursString, 10);
                 const minutes = parseInt(minutesString, 10);
-                startDate = addHours(startDate, hours)
+                startDate = addHours(startDate, hours +2)
                 startDate = addMinutes(startDate, minutes)
 
                 endDate = startOfDay(endDate)
@@ -66,7 +66,7 @@ function CreateTemplate() {
                 const [endHoursString, endMinutesString] = event.endTime.split(":");
                 const endHours = parseInt(endHoursString, 10);
                 const endMinutes = parseInt(endMinutesString, 10);
-                endDate = addHours(endDate, endHours )
+                endDate = addHours(endDate, endHours +2)
                 endDate = addMinutes(endDate, endMinutes)
 
                 const googleEvent: GoogleEvent = {
