@@ -3,7 +3,7 @@ import { addHours } from "date-fns";
 const now = new Date();
 const newTime = addHours(now, 2);
 
-export const event = {
+export const singleEvent = {
   summary: "Testing calendar api",
   description: "testing calendar api",
   start: {

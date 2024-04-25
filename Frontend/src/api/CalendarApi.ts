@@ -1,4 +1,3 @@
-import { addHours } from "date-fns";
 import { getCookie } from "../helpers/CookieHelpers";
 import { sprint } from "../templates/Sprint";
 import { saltEvent } from "../templates/SaltTemplate";
