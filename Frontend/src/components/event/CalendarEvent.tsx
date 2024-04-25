@@ -16,7 +16,7 @@ export type CalendarEvent = {
     day: number,
     startTime: string,
     endTime: string,
-    recurrence: string
+    recurrence?: string
 }
 
 export type GoogleEvent = {
