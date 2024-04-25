@@ -1,7 +1,6 @@
 import { useState } from "react";
 import getUser, { User } from "./api/UserApi";
 import { useQuery } from "@tanstack/react-query";
-import { changeDate, createCalendarEvent, createCalendarTemplate, createSprint, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 import Login from "./components/login/Login";
 import Home from "./components/home/Home";
