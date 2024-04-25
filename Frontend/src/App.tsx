@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { changeDate, createCalendarEvent, createCalendarTemplate, createSprint, deleteCalendarEvent, deleteTemplate, getSingleEvent } from "./api/CalendarApi";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 import Login from "./components/login/Login";
+import Home from "./components/home/Home";
 
 
 
@@ -74,8 +75,9 @@ function App() {
         )}
       </div>
 
+      <Home/>
+
       <button onClick={() => createCalendarEvent()}> Create single event </button>
-      <button onClick={() => createCalendarTemplate()}>Create salt template</button>
       <button onClick={() => createSprint()}>Create sprint!</button>
       <button onClick={() => deleteCalendarEvent("5a0de5di5gn7ugc7qbtm7jbamo")}>Delete latest event</button>
       <button onClick={() => deleteTemplate("salt")}>Delete salt event</button>

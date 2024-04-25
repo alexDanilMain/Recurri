@@ -2,6 +2,7 @@ import { FormEvent, useRef, useState } from "react";
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import WeekTable from "../weekTable/WeekTable";
 import { CalendarEvent, GoogleEvent } from "../event/CalendarEvent";
+import { createCalendarTemplate } from "../../api/CalendarApi";
 
 
 export type Week = {
@@ -72,7 +73,7 @@ function CreateTemplate() {
 
                 const googleEvent: GoogleEvent = {
                     summary: event.name,
-                    location: event.description,
+                    description: event.description,
                     start: {
                         dateTime: startDate.toISOString(),
                         timeZone: "Europe/Stockholm"
@@ -94,7 +95,7 @@ function CreateTemplate() {
         });
     
         console.log(googleEvents)
-    
+        createCalendarTemplate(googleEvents);
     }
     
     return (

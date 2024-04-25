@@ -21,7 +21,7 @@ export type CalendarEvent = {
 
 export type GoogleEvent = {
     summary: string,
-    location?: string,
+    description?: string,
     start: {
         dateTime: string,
         timeZone: string

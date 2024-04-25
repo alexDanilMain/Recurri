@@ -2,6 +2,7 @@ import { getCookie } from "../helpers/CookieHelpers";
 import { sprint } from "../templates/Sprint";
 import { saltEvent } from "../templates/SaltTemplate";
 import { singleEvent } from "../templates/SingleEvent";
+import { GoogleEvent } from "../components/event/CalendarEvent";
 
 interface EventData {
   summary: string;
@@ -35,8 +36,8 @@ export async function createCalendarEvent() {
   });
 }
 
-export async function createSprint() {
-  const promises = sprint.map(async (event) => {
+export async function createCalendarTemplate(eventTemplate: GoogleEvent[]) {
+  const promises = eventTemplate.map(async (event) => {
     const response = await fetch(
       "https://www.googleapis.com/calendar/v3/calendars/primary/events",
       {
@@ -63,7 +64,7 @@ export async function createSprint() {
   }
 }
 
-export async function createCalendarTemplate() {
+export async function createSprint() {
   await fetch(BASE_URL, {
     method: "POST",
     headers: {
