@@ -1,3 +1,4 @@
+import CreateTemplate from "../createTemplate/CreateTemplate"
 
 
 function Home() {

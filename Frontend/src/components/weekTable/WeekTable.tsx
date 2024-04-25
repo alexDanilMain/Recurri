@@ -1,3 +1,6 @@
+import { Dispatch, RefObject, SetStateAction } from "react";
+import { Week } from "../createTemplate/CreateTemplate";
+import CalendarEvent from "../event/CalendarEvent";
 
 type Props = {
     weeks: Week[],

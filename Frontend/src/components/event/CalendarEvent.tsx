@@ -1,3 +1,5 @@
+import { Dispatch, RefObject, SetStateAction, useRef } from "react"
+import { Week } from "../createTemplate/CreateTemplate"
 
 type Props = {
     CustomRef: RefObject<HTMLDialogElement>
