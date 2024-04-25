@@ -1,81 +1,51 @@
-import { useRef } from "react"
+import { Dispatch, RefObject, SetStateAction } from "react"
 import CalendarEvent from "./Event/CalendarEvent"
+import { Week } from "../CreateTemplate"
 
+type Props = {
+    weeks : Week[],
+    handleAddEvent: (weekIndex: number) => void,
+    CustomRef : RefObject<HTMLDialogElement>,
+    setWeeks: Dispatch<SetStateAction<Week[]>>
+}
 
-function WeekTable() {
-    const CustomRef = useRef<HTMLDialogElement>(null)
+function WeekTable({weeks, handleAddEvent, CustomRef, setWeeks}: Props) {
 
-
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index:number) => {
+        const { value } = e.target;
+        const updatedWeeks = [...weeks];
+        updatedWeeks[index].number = parseInt(value);
+        setWeeks(updatedWeeks)
+    }
     return (
         <>
-            <table className="table table-sm">
-                <thead>
-                    <tr>
-                        <th>Week</th>
-                        <th><input type="number" className="input input-bordered w-full input-sm max-w-xs" placeholder="Week number" /></th>
-                        <th><button className="btn btn-sm"> + Add Day</button></th>
-                    </tr>
-                    <tr>
-                        <th>Summary</th>
-                        <th>Description</th>
-                        <th>Day</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Recurrence</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <CalendarEvent CustomRef={CustomRef} />
-                </tbody>
-            </table>
+            {weeks.map((week, index) => {
+                return(
+                    <table className="table table-sm" key={"week_"+index}>
+                    <thead>
+                        <tr>
+                            <th>Week</th>
+                            <th><input type="number" onChange={(e)=>handleInputChange(e,index)} className="input input-bordered w-full input-sm max-w-xs" placeholder="Week number" /></th>
+                            <th><button className="btn btn-sm" onClick={()=>handleAddEvent(index)}> + Add Event</button></th>
+                        </tr>
+                        <tr>
+                            <th>Summary</th>
+                            <th>Description</th>
+                            <th>Day</th>
+                            <th>Start</th>
+                            <th>End</th>
+                            <th>Recurrence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {week.events.map((_,eventIndex)=> <CalendarEvent key={"Week_"+index+"_Event_"+eventIndex} CustomRef={CustomRef} setWeeks={setWeeks} weeks={weeks} weekIndex={index} index={eventIndex}/>)}
+                    </tbody>
+                </table>
+                )
+            } )}
+           
 
-            <dialog id="my_modal_3" className="modal z-20" ref={CustomRef}>
-                <div className="modal-box">
-                    <form method="dialog">
-                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-                    </form>
-                    <form action="" className="form-control items-center">
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 1</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 2</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 3</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 4</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 5</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 6</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <label className="label cursor-pointer justify-start gap-6">
-                            <span className="label-text">Day 7</span>
-                            <input type="checkbox" value="1" className="checkbox" />
-                        </label>
-
-                        <input type="text" />
-                        <input type="submit" className="btn btn-sm" value="Apply" />
-                    </form>
-                </div>
-            </dialog>
+           
         </>
     )
 }
