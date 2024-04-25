@@ -22,13 +22,17 @@ namespace Backend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
         {
-            return await _context.Templates.Include(t => t.Weeks).ToListAsync();
+            return await _context.Templates
+            .Include(t => t.Weeks)
+            .ThenInclude(w => w.Events).ToListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Template>> GetTemplate(int id)
         {
-            var template = await _context.Templates.Include(t => t.Weeks).FirstOrDefaultAsync(t => t.Id == id);
+            var template = await _context.Templates
+            .Include(t => t.Weeks)
+            .ThenInclude(w => w.Events).FirstOrDefaultAsync(t => t.Id == id);
 
             if (template == null)
             {
@@ -41,7 +45,8 @@ namespace Backend.Controllers
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(Template template)
         {
-            _context.Templates.Add(template);
+            await _context.Templates.AddAsync(template);
+            template.Weeks.Select(week => _context.Weeks.Add(week));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTemplate", new { id = template.Id }, template);
