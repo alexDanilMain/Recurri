@@ -47,8 +47,6 @@ function CreateTemplate() {
 
     const convertToGoogle = (weeks:Week[], templateStart:Date ) => {
         const googleEvents: GoogleEvent[] = [];
-       
-
         
         weeks.forEach((week) => {
             let startDate = templateStart
