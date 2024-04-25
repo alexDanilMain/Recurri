@@ -4,7 +4,7 @@ namespace Backend.Models
     {
         public int Id { get; set; }
         public required string Name { get; set; }
-        public Week[] Weeks {get; set;} = [];
+        public ICollection<Week> Weeks {get; set;} = [];
 
     }
 }

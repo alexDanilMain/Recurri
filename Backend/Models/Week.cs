@@ -4,6 +4,6 @@ namespace Backend.Models
     {
         public int Id { get; set; }
         public int Number {get; set;}
-        public Event[] Events {get; set;} = [];
+        public ICollection<Event> Events {get; set;} = [];
     }
 }
