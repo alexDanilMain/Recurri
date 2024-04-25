@@ -1,5 +1,12 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Net.Http.Json;
+
 public class CalendarEvent
 {
+    
+    [Key] 
+    public Guid Id { get; set; }
     public string Summary { get; set; }
     public string Location { get; set; }
     public EventDateTime Start { get; set; }
@@ -7,16 +14,13 @@ public class CalendarEvent
     public List<string> Recurrence { get; set; }
     public string ExtendedPropertiesJson { get; set; }  
 
-    [NotMapped]  
-    public Dictionary<string, Dictionary<string, string>> ExtendedProperties
-    {
-        get => string.IsNullOrEmpty(ExtendedPropertiesJson) ? null : JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, string>>>(ExtendedPropertiesJson);
-        set => ExtendedPropertiesJson = JsonConvert.SerializeObject(value);
-    }
+
 }
 
 public class EventDateTime
 {
+    [Key] 
+    public Guid Id { get; set; }
     public string DateTime { get; set; }
     public string TimeZone { get; set; }
 }

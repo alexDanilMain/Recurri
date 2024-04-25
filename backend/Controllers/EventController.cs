@@ -20,14 +20,15 @@ public class CalendarTemplatesController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
     {
-        return await _context.Templates.Include(t => t.Events).ThenInclude(e => e.Start).ThenInclude(e => e.End).ToListAsync();
+        // Only Include is needed, no ThenInclude for direct properties like Start and End
+        return await _context.Templates.Include(t => t.Events).ToListAsync();
     }
 
     // GET: api/CalendarTemplates/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Template>> GetTemplate(Guid id)
     {
-        var template = await _context.Templates.Include(t => t.Events).ThenInclude(e => e.Start).ThenInclude(e => e.End).FirstOrDefaultAsync(t => t.Id == id);
+        var template = await _context.Templates.Include(t => t.Events).FirstOrDefaultAsync(t => t.Id == id);
 
         if (template == null)
         {
