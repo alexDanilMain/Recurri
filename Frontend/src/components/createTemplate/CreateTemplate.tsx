@@ -54,9 +54,12 @@ function CreateTemplate() {
             let startDate = templateStart
             let endDate = templateStart
             week.events.forEach((event) => {
-
+                console.log(event.day)
                 startDate = startOfDay(startDate)
-                startDate = addDays(startDate, (week.number-1) * 7)
+                let endaddDays = ((week.number-1) * 7) + (event.day-1) 
+
+                startDate = addDays(startDate, endaddDays)
+            
                 const [hoursString, minutesString] = event.startTime.split(":");
                 const hours = parseInt(hoursString, 10);
                 const minutes = parseInt(minutesString, 10);
@@ -64,7 +67,8 @@ function CreateTemplate() {
                 startDate = addMinutes(startDate, minutes)
 
                 endDate = startOfDay(endDate)
-                endDate = addDays(endDate, (week.number-1) * 7)
+                endDate = addDays(endDate, endaddDays)
+
                 const [endHoursString, endMinutesString] = event.endTime.split(":");
                 const endHours = parseInt(endHoursString, 10);
                 const endMinutes = parseInt(endMinutesString, 10);
@@ -82,7 +86,7 @@ function CreateTemplate() {
                         dateTime: endDate.toISOString(),
                         timeZone: "Europe/Stockholm"
                     },
-                    recurrence: [event.recurrence],
+                    recurrence: event.recurrence ? [event.recurrence] : [],
                     extendedProperties: {
                         shared: {
                             template: "sprint"
