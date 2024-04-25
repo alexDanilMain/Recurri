@@ -14,25 +14,13 @@ interface EventDataArr {
   items: EventData[];
 }
 
-const now = new Date();
-const newTime = addHours(now, 2);
+
 const BASE_URL =
   "https://www.googleapis.com/calendar/v3/calendars/primary/events";
 
-export async function createCalendarEvent() {
-  const event = {
-    summary: "Testing calendar api",
-    description: "testing calendar api",
-    start: {
-      dateTime: now.toISOString(), // Date.toISOString() ->
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // America/Los_Angeles
-    },
-    end: {
-      dateTime: newTime.toISOString(), // Date.toISOString() ->
-      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone, // America/Los_Angeles
-    },
-  };
 
+
+export async function createCalendarEvent() {
   await fetch(BASE_URL, {
     method: "POST",
     headers: {
