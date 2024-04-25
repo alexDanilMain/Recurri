@@ -13,7 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TemplateContext>(options =>
 options.UseSqlServer(builder.Configuration
-.GetConnectionString("TemplateContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
+.GetConnectionString("TemplateContext") ?? throw new InvalidOperationException("Connection string 'TemplateContext' not found.")));
 
 
 builder.Services.AddCors();
