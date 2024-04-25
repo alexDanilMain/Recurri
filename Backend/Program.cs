@@ -15,10 +15,15 @@ builder.Services.AddDbContext<TemplateContext>(options =>
 options.UseSqlServer(builder.Configuration
 .GetConnectionString("TemplateContext") ?? throw new InvalidOperationException("Connection string 'AppDbContext' not found.")));
 
+
+builder.Services.AddCors();
+
 var app = builder.Build();
 
-
-
+app.UseCors(x => x
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowAnyOrigin());
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
