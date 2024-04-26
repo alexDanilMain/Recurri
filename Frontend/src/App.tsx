@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
 import Login from "./components/login/Login";
 import Home from "./components/home/Home";
+import Overview from "./components/overview/Overview";
 
 
 
@@ -75,6 +76,8 @@ function App() {
       </div>
 
       <Home/>
+
+      <Overview/>
     </>
   )
 
