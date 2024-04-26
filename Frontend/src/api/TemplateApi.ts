@@ -7,7 +7,7 @@ export type Template = {
 
 const BASE_URL = "http://localhost:5236/api/Templates";
 
-export async function createCalendarTemplate(eventTemplate: Template) {
+export async function saveCalendarTemplate(eventTemplate: Template) {
      {
       const response = await fetch(
         BASE_URL,

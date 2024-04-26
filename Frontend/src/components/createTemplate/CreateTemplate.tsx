@@ -3,6 +3,7 @@ import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import WeekTable from "../weekTable/WeekTable";
 import { CalendarEvent, GoogleEvent } from "../event/CalendarEvent";
 import { createCalendarTemplate } from "../../api/CalendarApi";
+import { Template, saveCalendarTemplate } from "../../api/TemplateApi";
 
 
 export type Week = {
@@ -43,6 +44,14 @@ function CreateTemplate() {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(weeks)
+    }
+
+    const saveTemplate = (weeks: Week[]) => {
+        const template: Template = {
+            name: "TestTemplate",
+            weeks: weeks
+        }
+        saveCalendarTemplate(template);
     }
 
     const convertToGoogle = (weeks:Week[], templateStart:Date ) => {
