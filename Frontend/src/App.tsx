@@ -1,4 +1,5 @@
 import Home from "./components/Home/Home";
+import Overview from "./components/Home/Overview/Overview";
 import Login from "./components/Login/Login";
 
 export function getCookie(name: string) {
@@ -11,7 +12,7 @@ function App() {
 
   return (
     <>
-      <Home></Home>
+      <Home/>
     </>
   )
 
