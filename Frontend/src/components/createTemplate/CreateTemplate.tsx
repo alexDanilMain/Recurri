@@ -44,6 +44,7 @@ function CreateTemplate() {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(weeks)
+        saveTemplate(weeks);
     }
 
     const saveTemplate = (weeks: Week[]) => {
