@@ -26,7 +26,7 @@ export async function saveCalendarTemplate(eventTemplate: Template) {
   
   }
 
-  export async function getAllTemplates(){
+  export async function getAllTemplates(): Promise<Template[]>{
     const response = await fetch(BASE_URL);
     const data = await response.json();
     console.log(data);
