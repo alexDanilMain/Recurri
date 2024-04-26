@@ -30,5 +30,5 @@ export async function saveCalendarTemplate(eventTemplate: Template) {
     const response = await fetch(BASE_URL);
     const data = await response.json();
     console.log(data);
-    return data;
+    return data as Template[];
   }
