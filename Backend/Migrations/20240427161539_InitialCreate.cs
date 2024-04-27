@@ -16,7 +16,8 @@ namespace Backend.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserEmail = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,8 +52,8 @@ namespace Backend.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Day = table.Column<int>(type: "int", nullable: false),
-                    StartTime = table.Column<int>(type: "int", nullable: false),
-                    EndTime = table.Column<int>(type: "int", nullable: false),
+                    StartTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EndTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Recurrence = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     WeekId = table.Column<int>(type: "int", nullable: true)
                 },

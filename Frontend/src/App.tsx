@@ -1,46 +1,58 @@
 import { useState } from "react";
-import getUser, { User } from "./api/UserApi";
-import { useQuery } from "@tanstack/react-query";
-import { deleteCookie, setCookie } from "./helpers/CookieHelpers";
-import Login from "./components/login/Login";
+import { User } from "./api/UserApi";
+import { deleteCookie } from "./helpers/CookieHelpers";
 import Home from "./components/home/Home";
 import Overview from "./components/overview/Overview";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 
 
-const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=`;
+// const LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?scope=https://www.googleapis.com/auth/calendar&include_granted_scopes=true&response_type=token&state=state_parameter_passthrough_value&redirect_uri=http://localhost:5173&client_id=`;
 
 
 function App() {
   const [profile, setProfile] = useState<User>();
 
-  if (location.hash) {
-    const params = new URLSearchParams(location.hash);
-    const accessToken = params.get('access_token');
-
-    setCookie('access_token', accessToken!, 1);
-    location.href = import.meta.env.BASE_URL;
-  };
-
-
-  const { data, isLoading} = useQuery({
-    queryKey: ["user"],
-    queryFn: getUser
-  })
-
-
-  const createProfile = () => {
-    const user: User = {
-      picture: data.photos[0].url,
-      name: data.names[0].displayName,
-      email: data.emailAddresses[0].value
-    }
-    setProfile(user);
+  if (profile) {
+    sessionStorage.setItem("email", profile!.email);
   }
 
-  const login = () => {
-    location.href = LOGIN_URL + import.meta.env.VITE_APP_CLIENT_ID;
-  }
+  // if (location.hash) {
+  //   const params = new URLSearchParams(location.hash);
+  //   const accessToken = params.get('access_token');
+
+  //   setCookie('access_token', accessToken!, 1);
+  //   location.href = import.meta.env.BASE_URL;
+  // };
+
+  // if (location.search) {
+  //   const params = new URLSearchParams(location.search);
+  //   const code = params.get('code');
+
+  //   setCookie('code', code!, 1);
+  //   getJsonWebToken();
+  // };
+
+
+  // const { data, isLoading } = useQuery({
+  //   queryKey: ["user"],
+  //   queryFn: getUser
+  // })
+
+
+  // const createProfile = () => {
+  //   const user: User = {
+  //     picture: data.photos[0].url,
+  //     name: data.names[0].displayName,
+  //     email: data.emailAddresses[0].value
+  //   }
+  //   setProfile(user);
+  // }
+
+  // const login = () => {
+  //   location.href = LOGIN_URL + import.meta.env.VITE_APP_CLIENT_ID;
+  // }
 
   const logOut = () => {
     setProfile(undefined);
@@ -48,16 +60,19 @@ function App() {
     window.location.reload();
   };
 
+  // const getJWT = async () => {
+  //   location.href = "https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?redirect_uri=http://localhost:5173&prompt=consent&response_type=code&client_id=1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com&scope=openid&access_type=offline&service=lso&o2v=2&ddm=0&flowName=GeneralOAuthFlow";
+  // }
 
-  if (data && !profile) {
-    createProfile();
-  }
+
+  // if (data && !profile) {
+  //   createProfile();
+  // }
 
   return (
     <>
       <div>
-        {isLoading && <p>Loading ...</p>}
-        <h2>React Google Login</h2>
+        {/* {isLoading && <p>Loading ...</p>} */}
         <br />
         <br />
         {profile ? (
@@ -69,15 +84,27 @@ function App() {
             <br />
             <br />
             <button onClick={logOut}>Log out</button>
+            {/* <button onClick={getJWT}>Get JWT</button> */}
+
+            <Home />
+            <Overview />
           </div>
         ) : (
-          <Login handleClick={login}/>
+          <div>
+            {/* <Login handleClick={login} /> */}
+            <GoogleLogin
+              onSuccess={credentialResponse => {
+                document.cookie = `google_login_key = ${credentialResponse.credential}`
+                console.log(jwtDecode(credentialResponse.credential as string));
+                setProfile(jwtDecode(credentialResponse.credential as string));
+              }}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+            />
+          </div>
         )}
       </div>
-
-      <Home/>
-
-      <Overview/>
     </>
   )
 

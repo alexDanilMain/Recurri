@@ -17,9 +17,11 @@
     "dotenv": "^16.4.5",
     "firebase": "^10.11.0",
     "http-proxy-middleware": "^3.0.0",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-datetime-picker": "^5.6.0",
     "react-dom": "^18.2.0",
+    "react-google-login": "^5.2.2",
     "save-dev": "^0.0.1-security",
     "ts-node": "^10.9.2"
   },

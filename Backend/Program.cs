@@ -1,6 +1,6 @@
+using Backend.Config;
 using Backend.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,8 +15,20 @@ builder.Services.AddDbContext<TemplateContext>(options =>
 options.UseSqlServer(builder.Configuration
 .GetConnectionString("TemplateContext") ?? throw new InvalidOperationException("Connection string 'TemplateContext' not found.")));
 
-
 builder.Services.AddCors();
+
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", SecurityConfig.JwtSecurityScheme);
+    options.AddSecurityRequirement(SecurityConfig.JwtSecurityRequirement);
+});
+
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.Authority = "https://accounts.google.com";
+    options.Audience = "1021052820543-fm1vrkkpkq1idpvckttevn0ir9d9qdc2.apps.googleusercontent.com";
+});
 
 var app = builder.Build();
 
@@ -31,6 +43,7 @@ app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
