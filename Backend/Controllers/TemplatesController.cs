@@ -92,7 +92,11 @@ namespace Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTemplate(int id)
         {
-            var template = await _context.Templates.FindAsync(id);
+            var template = await _context.Templates
+            .Include(t => t.Weeks)
+            .ThenInclude(w => w.Events)
+            .FirstOrDefaultAsync(template => template.Id == id);
+            
             if (template == null)
             {
                 return NotFound();
