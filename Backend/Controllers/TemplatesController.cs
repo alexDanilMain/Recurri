@@ -57,30 +57,34 @@ namespace Backend.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTemplate(int id, Template template)
+        public async Task<ActionResult<Template>> PutTemplate(int id, [FromBody] Template template)
         {
             if (id != template.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(template).State = EntityState.Modified;
+            var templateToUpdate = await _context.Templates
+            .Include(t => t.Weeks)
+            .ThenInclude(w => w.Events)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.Id == id);
 
-            try
+            if (templateToUpdate == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TemplateExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+            templateToUpdate = template;
+            templateToUpdate.Weeks = template.Weeks;
+
+            _context.Templates.Update(templateToUpdate);
+            await _context.SaveChangesAsync();
+
+            await _context.SaveChangesAsync();
+
+            // _context.Entry(existingTemplate).State = EntityState.Modified;
+
 
             return NoContent();
         }
