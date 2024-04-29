@@ -1,4 +1,5 @@
 import { Week } from "../components/createTemplate/CreateTemplate";
+import { EventRequest } from "../components/event/CalendarEvent";
 import { getCookie } from "../helpers/CookieHelpers";
 
 export type TemplateResponse = {
@@ -14,6 +15,13 @@ export type Template = {
   weeks: Week[];
 };
 
+export type TemplateRequest = {
+  id?: number;
+  name: string;
+  userEmail: string;
+  eventRequests: EventRequest[];
+}
+
 export type PutReq = {
   template: TemplateResponse;
   id: number;
@@ -21,7 +29,7 @@ export type PutReq = {
 
 const BASE_URL = "http://localhost:5236/api/Templates";
 
-export async function saveCalendarTemplate(eventTemplate: Template) {
+export async function saveCalendarTemplate(eventTemplate: TemplateRequest) {
   {
     const response = await fetch(BASE_URL, {
       method: "POST",

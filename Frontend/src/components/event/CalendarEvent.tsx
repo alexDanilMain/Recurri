@@ -19,6 +19,16 @@ export type CalendarEvent = {
     recurrence?: string
 }
 
+export type EventRequest = {
+    name: string,
+    description: string,
+    day: number,
+    startTime: string,
+    endTime: string,
+    recurrence?: string
+    weekNumber: number
+}
+
 export type GoogleEvent = {
     summary: string,
     description?: string,

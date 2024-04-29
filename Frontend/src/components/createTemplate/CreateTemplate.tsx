@@ -1,9 +1,9 @@
 import { FormEvent, useRef, useState } from "react";
 import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
 import WeekTable from "../weekTable/WeekTable";
-import { CalendarEvent, GoogleEvent } from "../event/CalendarEvent";
+import { CalendarEvent, EventRequest, GoogleEvent } from "../event/CalendarEvent";
 import { createCalendarTemplate } from "../../api/CalendarApi";
-import { Template, saveCalendarTemplate } from "../../api/TemplateApi";
+import { Template, TemplateRequest, saveCalendarTemplate } from "../../api/TemplateApi";
 import { useGoogleLogin } from "@react-oauth/google";
 import { setCookie } from "../../helpers/CookieHelpers";
 
@@ -53,10 +53,24 @@ function CreateTemplate() {
     }
 
     const saveTemplate = (weeks: Week[]) => {
-        const template: Template = {
+        const eventRequests: EventRequest[] = []
+        weeks.map(week => week.events.map(
+            event => {const eventRequest: EventRequest = {
+                name: event.name,
+                description: event.description,
+                day: event.day,
+                startTime: event.startTime,
+                endTime: event.endTime, 
+                recurrence: event.recurrence,
+                weekNumber: week.number
+            }
+            eventRequests.push(eventRequest);
+        }
+        ))
+        const template: TemplateRequest = {
             userEmail: sessionStorage.getItem("email")!,
             name: "TestTemplate",
-            weeks: weeks
+            eventRequests: eventRequests
         }
         saveCalendarTemplate(template);
     }
