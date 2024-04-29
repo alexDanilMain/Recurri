@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backend.Controllers
-{
+namespace Backend.Controllers;
+
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -25,8 +25,7 @@ namespace Backend.Controllers
         {
             var userEmail = User.Claims.FirstOrDefault(claim => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")!.Value;
             return await _context.Templates
-            .Include(t => t.Weeks)
-            .ThenInclude(w => w.Events)
+            .Include(t => t.Events)
             .Where(template => template.UserEmail == userEmail)
             .ToListAsync();
         }
@@ -35,8 +34,7 @@ namespace Backend.Controllers
         public async Task<ActionResult<Template>> GetTemplate(int id)
         {
             var template = await _context.Templates
-            .Include(t => t.Weeks)
-            .ThenInclude(w => w.Events).FirstOrDefaultAsync(t => t.Id == id);
+            .Include(t => t.Events).FirstOrDefaultAsync(t => t.Id == id);
 
             if (template == null)
             {
@@ -47,13 +45,11 @@ namespace Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Template>> PostTemplate(Template template)
+        public async Task<ActionResult<Template>> CreateTemplate(Template template)
         {
             await _context.Templates.AddAsync(template);
-            template.Weeks.Select(week => _context.Weeks.Add(week));
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTemplate", new { id = template.Id }, template);
+            return CreatedAtAction(nameof(GetTemplate), new {Id = template.Id}, template);
         }
 
         [HttpPut("{id}")]
@@ -65,8 +61,7 @@ namespace Backend.Controllers
             }
 
             var templateToUpdate = await _context.Templates
-            .Include(t => t.Weeks)
-            .ThenInclude(w => w.Events)
+            .Include(t => t.Events)
             .AsNoTracking()
             .FirstOrDefaultAsync(t => t.Id == id);
 
@@ -76,12 +71,11 @@ namespace Backend.Controllers
             }
 
             templateToUpdate = template;
-            templateToUpdate.Weeks = template.Weeks;
+            templateToUpdate.Events = template.Events;
 
             _context.Templates.Update(templateToUpdate);
             await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
 
             // _context.Entry(existingTemplate).State = EntityState.Modified;
 
@@ -93,8 +87,7 @@ namespace Backend.Controllers
         public async Task<IActionResult> DeleteTemplate(int id)
         {
             var template = await _context.Templates
-            .Include(t => t.Weeks)
-            .ThenInclude(w => w.Events)
+            .Include(t => t.Events)
             .FirstOrDefaultAsync(template => template.Id == id);
             
             if (template == null)
@@ -113,4 +106,4 @@ namespace Backend.Controllers
             return _context.Templates.Any(e => e.Id == id);
         }
     }
-}
+

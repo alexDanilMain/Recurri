@@ -49,12 +49,15 @@ namespace Backend.Migrations
                     b.Property<string>("StartTime")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("WeekId")
+                    b.Property<int?>("TemplateId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WeekNumber")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WeekId");
+                    b.HasIndex("TemplateId");
 
                     b.ToTable("Events");
                 });
@@ -80,47 +83,14 @@ namespace Backend.Migrations
                     b.ToTable("Templates");
                 });
 
-            modelBuilder.Entity("Backend.Models.Week", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("TemplateId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TemplateId");
-
-                    b.ToTable("Weeks");
-                });
-
             modelBuilder.Entity("Backend.Models.Event", b =>
                 {
-                    b.HasOne("Backend.Models.Week", null)
-                        .WithMany("Events")
-                        .HasForeignKey("WeekId");
-                });
-
-            modelBuilder.Entity("Backend.Models.Week", b =>
-                {
                     b.HasOne("Backend.Models.Template", null)
-                        .WithMany("Weeks")
+                        .WithMany("Events")
                         .HasForeignKey("TemplateId");
                 });
 
             modelBuilder.Entity("Backend.Models.Template", b =>
-                {
-                    b.Navigation("Weeks");
-                });
-
-            modelBuilder.Entity("Backend.Models.Week", b =>
                 {
                     b.Navigation("Events");
                 });
