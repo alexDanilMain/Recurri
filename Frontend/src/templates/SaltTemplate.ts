@@ -17,7 +17,11 @@ export const saltEvent = {
     },
     attendees: [
       {
-        "email": "axel.petersson@appliedtechnology.se"
+        "email": "axel.petersson@appliedtechnology.se",
+        "responseStatus": "needsAction"
       }
-    ]
+    ],
+    reminders: {
+      "useDefault": true
+     }
   };
