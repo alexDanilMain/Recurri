@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { PutReq, Template, editTemplate, getAllTemplates } from "../../api/TemplateApi";
+import { PutReq, Template, TemplateResponse, editTemplate, getAllTemplates } from "../../api/TemplateApi";
 import { useState } from "react";
 
 function Overview() {
@@ -10,10 +10,10 @@ function Overview() {
         queryFn: getAllTemplates
     });
 
-    const handleClick = (template: Template) => {
+    const handleClick = (template: TemplateResponse) => {
         setSelectedTemplate(template);
-        // const putReq: PutReq = {template, template.Id}
-        // editTemplate(putReq);
+        const putReq: PutReq = {template, id: template.id}
+        editTemplate(putReq);
     }
     return (
         <>
@@ -32,7 +32,7 @@ function Overview() {
 
                 
             {data && data.map( template =>
-                <div  key={template.name} className="border border-black pb-[100%] relative">
+                <div onClick={() => handleClick(template)}  key={template.name} className="border border-black pb-[100%] relative">
                 <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                     {template.name}
                 </div>
