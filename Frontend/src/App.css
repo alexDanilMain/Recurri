@@ -196,4 +196,7 @@
     background: #6f48eb;
     color: white;
   }
-  
+  .highlight {
+    background-color: #ffeb3b; 
+    color: black;
+  }
