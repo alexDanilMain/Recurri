@@ -72,7 +72,8 @@ function CreateTemplate({setTemplates} : Props) {
         };
 
         setTemplates(oldTemplates => [...oldTemplates, template])
-        navigate("/home")
+        console.log( template)
+        //navigate("/home")
     }
 
     

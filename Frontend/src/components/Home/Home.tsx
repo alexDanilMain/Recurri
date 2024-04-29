@@ -8,7 +8,7 @@ function Home() {
   const { pathname } = location;
   const [templates, setTemplates] = useState<Template[]>([])
   const pathArray = pathname.split("/")
-  
+
   return (
 
     <div className="drawer lg:drawer-open">
@@ -26,7 +26,6 @@ function Home() {
               return <li key={name+index}><Link to={path}>{name}</Link></li>
               
             })}
-
           </ul>
         </div>
         
