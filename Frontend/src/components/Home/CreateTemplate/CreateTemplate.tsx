@@ -1,15 +1,37 @@
-import { FormEvent, useRef, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useRef, useState } from "react";
 import WeekTable from "./WeekTable/WeekTable"
-import { CalendarEvent, GoogleEvent } from "./WeekTable/Event/CalendarEvent";
-import { addDays, addHours, addMinutes, startOfDay } from "date-fns";
+import { CalendarEvent } from "./WeekTable/Event/CalendarEvent";
+import { convertToGoogle } from "./helpers";
+import { useNavigate } from "react-router-dom";
+
+export type Template = {
+    templateName: string
+    weeks : Week[]
+}
 
 export type Week = {
     number: number,
     events: CalendarEvent[];
 }
 
-function CreateTemplate() {
-    const [weeks, setWeeks] = useState<Week[]>([]);
+type Props = {
+    setTemplates: Dispatch<SetStateAction<Template[]>>
+}
+
+function CreateTemplate({setTemplates} : Props) {
+    const navigate = useNavigate();
+    const [weeks, setWeeks] = useState<Week[]>([{
+        number: 1,
+        events : [{
+            name: "",
+            description: "",
+            day: 1,
+            startTime : "",
+            endTime : "",
+            recurrence : ""
+        }]
+    }]);
+
     const CustomRef = useRef<HTMLDialogElement>(null)
 
     const handleAddWeek = () => {
@@ -40,71 +62,31 @@ function CreateTemplate() {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(weeks)
+        const { templateName } = e.target as typeof e.target & {
+            templateName: { value: string };
+        };
+    
+        const template: Template = {
+            templateName: templateName.value,
+            weeks : weeks
+        };
+
+        setTemplates(oldTemplates => [...oldTemplates, template])
+        navigate("/home")
     }
 
-    const convertToGoogle = (weeks:Week[], templateStart:Date ) => {
-        const googleEvents: GoogleEvent[] = [];
-       
-
-        
-        weeks.forEach((week) => {
-            let startDate = templateStart
-            let endDate = templateStart
-            week.events.forEach((event) => {
-
-                startDate = startOfDay(startDate)
-                startDate = addDays(startDate, (week.number-1) * 7)
-                const [hoursString, minutesString] = event.startTime.split(":");
-                const hours = parseInt(hoursString, 10);
-                const minutes = parseInt(minutesString, 10);
-                startDate = addHours(startDate, hours +2)
-                startDate = addMinutes(startDate, minutes)
-
-                endDate = startOfDay(endDate)
-                endDate = addDays(endDate, (week.number-1) * 7)
-                const [endHoursString, endMinutesString] = event.endTime.split(":");
-                const endHours = parseInt(endHoursString, 10);
-                const endMinutes = parseInt(endMinutesString, 10);
-                endDate = addHours(endDate, endHours +2)
-                endDate = addMinutes(endDate, endMinutes)
-
-                const googleEvent: GoogleEvent = {
-                    summary: event.name,
-                    location: event.description,
-                    start: {
-                        dateTime: startDate.toISOString(),
-                        timeZone: "Europe/Stockholm"
-                    },
-                    end: {
-                        dateTime: endDate.toISOString(),
-                        timeZone: "Europe/Stockholm"
-                    },
-                    recurrence: [event.recurrence],
-                    extendedProperties: {
-                        shared: {
-                            template: "sprint"
-                        }
-                    }
-                };
-    
-                googleEvents.push(googleEvent);
-            });
-        });
-    
-        console.log(googleEvents)
-    
-    }
     
     return (
         <section className="px-4">
-            <form action="" onSubmit={handleSubmit}>
-                <button type="button" onClick={handleAddWeek} className="btn btn-sm">+ Add Week</button>
-                <WeekTable weeks={weeks} handleAddEvent={handleAddEvent} setWeeks={setWeeks} CustomRef={CustomRef} />
-                <input type="submit" className="btn btn-sm mt-4" value="Create Template" />
-                <button className="btn btn-sm" onClick={()=>convertToGoogle(weeks, new Date())}> Convert To google </button>
 
+            <form action="" onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <input type="text" name="templateName" className="input input-bordered w-full input-sm max-w-xs" placeholder="Template name"/>
+                <button type="button" onClick={handleAddWeek} className="btn btn-sm max-w-48">+ Add Week</button>
+                <WeekTable weeks={weeks} handleAddEvent={handleAddEvent} setWeeks={setWeeks} CustomRef={CustomRef} />
+                <input type="submit" className="btn btn-sm mt-4 max-w-48" value="Create Template" />
+                <button className="btn btn-sm max-w-48" onClick={()=>convertToGoogle(weeks, new Date())}> Convert To google </button>
             </form>
+
             <dialog id="my_modal_3" className="modal z-20" ref={CustomRef}>
                 <div className="modal-box">
                     <form method="dialog">

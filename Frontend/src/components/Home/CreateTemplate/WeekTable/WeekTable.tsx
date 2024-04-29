@@ -9,7 +9,7 @@ type Props = {
     setWeeks: Dispatch<SetStateAction<Week[]>>
 }
 
-function WeekTable({weeks, handleAddEvent, CustomRef, setWeeks}: Props) {
+function WeekTable({weeks, handleAddEvent, setWeeks}: Props) {
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, index:number) => {
         const { value } = e.target;
@@ -26,7 +26,7 @@ function WeekTable({weeks, handleAddEvent, CustomRef, setWeeks}: Props) {
                         <tr>
                             <th>Week</th>
                             <th><input type="number" onChange={(e)=>handleInputChange(e,index)} className="input input-bordered w-full input-sm max-w-xs" placeholder="Week number" /></th>
-                            <th><button className="btn btn-sm" onClick={()=>handleAddEvent(index)}> + Add Event</button></th>
+                            <th><button type="button" className="btn btn-sm" onClick={()=>handleAddEvent(index)}> + Add Event</button></th>
                         </tr>
                         <tr>
                             <th>Summary</th>
@@ -34,11 +34,10 @@ function WeekTable({weeks, handleAddEvent, CustomRef, setWeeks}: Props) {
                             <th>Day</th>
                             <th>Start</th>
                             <th>End</th>
-                            <th>Recurrence</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {week.events.map((_,eventIndex)=> <CalendarEvent key={"Week_"+index+"_Event_"+eventIndex} CustomRef={CustomRef} setWeeks={setWeeks} weeks={weeks} weekIndex={index} index={eventIndex}/>)}
+                        {week.events.map((_,eventIndex)=> <CalendarEvent key={"Week_"+index+"_Event_"+eventIndex} setWeeks={setWeeks} weeks={weeks} weekIndex={index} index={eventIndex}/>)}
                     </tbody>
                 </table>
                 )
