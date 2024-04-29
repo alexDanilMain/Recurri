@@ -70,7 +70,7 @@ function CreateTemplate() {
         const template: TemplateRequest = {
             userEmail: sessionStorage.getItem("email")!,
             name: "TestTemplate",
-            eventRequests: eventRequests
+            events: eventRequests
         }
         saveCalendarTemplate(template);
     }

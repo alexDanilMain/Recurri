@@ -48,7 +48,11 @@ namespace Backend.Controllers;
         public async Task<ActionResult<Template>> CreateTemplate(Template template)
         {
             await _context.Templates.AddAsync(template);
-
+            foreach(var eventRequest in template.Events)
+            {
+                await _context.Events.AddAsync(eventRequest);
+            }
+            await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetTemplate), new {Id = template.Id}, template);
         }
 

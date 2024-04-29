@@ -19,7 +19,7 @@ export type TemplateRequest = {
   id?: number;
   name: string;
   userEmail: string;
-  eventRequests: EventRequest[];
+  events: EventRequest[];
 }
 
 export type PutReq = {
@@ -31,6 +31,7 @@ const BASE_URL = "http://localhost:5236/api/Templates";
 
 export async function saveCalendarTemplate(eventTemplate: TemplateRequest) {
   {
+    console.log("Event to add", eventTemplate);
     const response = await fetch(BASE_URL, {
       method: "POST",
       headers: {
