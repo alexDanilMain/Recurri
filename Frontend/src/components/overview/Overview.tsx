@@ -1,13 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAllTemplates } from "../../api/TemplateApi";
+import { PutReq, Template, editTemplate, getAllTemplates } from "../../api/TemplateApi";
+import { useState } from "react";
 
 function Overview() {
+    const [selectedTemplate, setSelectedTemplate] = useState<Template>();
 
     const {data, isLoading, isError} = useQuery({
         queryKey: ['templates'],
         queryFn: getAllTemplates
     });
 
+    const handleClick = (template: Template) => {
+        setSelectedTemplate(template);
+        // const putReq: PutReq = {template, template.Id}
+        // editTemplate(putReq);
+    }
     return (
         <>
         {isLoading && <p>Loading...</p>}
@@ -25,7 +32,7 @@ function Overview() {
 
                 
             {data && data.map( template =>
-                <div key={template.name} className="border border-black pb-[100%] relative">
+                <div  key={template.name} className="border border-black pb-[100%] relative">
                 <div className="absolute inset-0 flex items-center justify-center flex-col gap-4">
                     {template.name}
                 </div>

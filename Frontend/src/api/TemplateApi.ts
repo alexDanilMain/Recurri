@@ -1,11 +1,23 @@
 import { Week } from "../components/createTemplate/CreateTemplate";
 import { getCookie } from "../helpers/CookieHelpers";
 
+export type TemplateResponse = {
+  id: number;
+  name: string;
+  userEmail: string;
+  weeks: Week[];
+}
+
 export type Template = {
   userEmail: string;
   name: string;
   weeks: Week[];
 };
+
+export type PutReq = {
+  template: TemplateResponse;
+  id: number;
+}
 
 const BASE_URL = "http://localhost:5236/api/Templates";
 
@@ -25,13 +37,27 @@ export async function saveCalendarTemplate(eventTemplate: Template) {
   }
 }
 
-export async function getAllTemplates(): Promise<Template[]> {
+export async function getAllTemplates(): Promise<TemplateResponse[]> {
   const response = await fetch(BASE_URL, {
     headers: {
-      Authorization: `Bearer ${getCookie("google_login_key")}`
-    }
+      Authorization: `Bearer ${getCookie("google_login_key")}`,
+    },
   });
   const data = await response.json();
   console.log(data);
-  return data as Template[];
+  return data as TemplateResponse[];
+}
+
+export async function editTemplate(putRequest: PutReq) {
+  const response = await fetch(BASE_URL, {
+    method: "PUT",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+      Authorization: `Bearer ${getCookie("google_login_key")}`,
+    },
+    body: JSON.stringify(putRequest),
+  });
+  const data = await response.json();
+  console.log(data);
+  return data;
 }
